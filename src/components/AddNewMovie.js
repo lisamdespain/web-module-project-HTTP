@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
-const AddNewMovie = () =>{
-
+const AddNewMovie = (props) =>{
+    
     const { push } = useHistory();
-	const { setMovies } = props;
 	const [movie, setMovie] = useState({
 		title:"",
 		director: "",
@@ -25,10 +24,11 @@ const AddNewMovie = () =>{
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.put(`http://localhost:9000/api/movies/${id}`, movie)
+        axios.post(`http://localhost:9000/api/movies`, movie)
             .then(res=>{
-                setMovies(res.data);
-                push(`/movies/${movie.id}`);
+                console.log(res)
+                props.setMovies(res.data);
+                push(`/movies/`);
 			})
 			.catch(err=>{
 				console.log(err);
@@ -37,12 +37,13 @@ const AddNewMovie = () =>{
 	
 
 	const { title, director, genre, metascore, description } = movie;
-    console.log(props)
     return (
+        <div className="col">
+            <div className="modal-header">					
+            <h4 className="modal-title">Add a New Movie</h4>
+            </div>
         <form onSubmit={handleSubmit}>
-        <div className="modal-header">						
-            <h4 className="modal-title">Adding <strong>{movie.title}</strong></h4>
-        </div>
+        
         <div className="modal-body">					
             <div className="form-group">
                 <label>Title</label>
@@ -70,8 +71,9 @@ const AddNewMovie = () =>{
             <input type="submit" className="btn btn-info" value="Save"/>
             <Link to={`/movies/`}><input type="button" className="btn btn-default" value="Cancel"/></Link>
         </div>
+        
     </form>
-
+</div>
     )
 }
 export default AddNewMovie;
