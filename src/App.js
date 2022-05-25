@@ -7,7 +7,8 @@ import Movie from './components/Movie';
 import MovieHeader from './components/MovieHeader';
 
 import FavoriteMovieList from './components/FavoriteMovieList';
-
+import AddNewMovie from "./components/AddNewMovie";
+import EditMovieForm from './components/EditMovieForm';
 import axios from 'axios';
 
 const App = (props) => {
@@ -25,6 +26,8 @@ const App = (props) => {
   }, []);
 
   const deleteMovie = (id)=> {
+    // I'm not sure this is required. Local state was updated when I did the delete over in the movie component
+    setMovies(movies.filter((item)=> item.id !== Number(id)))
   }
 
   const addToFavorites = (movie) => {
@@ -44,14 +47,19 @@ const App = (props) => {
         
           <Switch>
             <Route path="/movies/edit/:id">
+              <EditMovieForm setMovies={setMovies}/>
             </Route>
 
             <Route path="/movies/:id">
-              <Movie/>
+              <Movie setMovies={setMovies} deleteMovie={deleteMovie}/>
             </Route>
 
             <Route path="/movies">
               <MovieList movies={movies}/>
+            </Route>
+
+            <Route path="/movies/add">
+              <AddNewMovie />
             </Route>
 
             <Route path="/">
